@@ -1,0 +1,5 @@
+/memguard
+*.dSYM/
+.DS_Store
+/review.md
+/next_steps.md

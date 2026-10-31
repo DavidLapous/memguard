@@ -1,0 +1,24 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: macos-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: extractions/setup-just@v2
+      - name: Build and self-test
+        run: just check
+      - name: Address & UndefinedBehavior Sanitizers
+        run: |
+          clang -O1 -g -fsanitize=address,undefined -Wall -Wextra -Werror memguard.c -o memguard-san
+          ./memguard-san --self-test
+          rm -rf memguard-san memguard-san.dSYM
