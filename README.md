@@ -94,12 +94,25 @@ memguard start    # load/restart an agent created by just enable; resumes LIVE k
 
 ## Status
 
-`memguard status` prints daemon state, a fresh RAM/pressure/swap snapshot,
-config on disk, and the largest observed unprotected and soft-protected processes.
-Eligibility is based on the disk config: below minimum, eligible at the normal
-threshold, or panic only. It is not a prediction of the daemon's next victim.
+```bash
+ > memguard status
+memguard — running · PID 24940
 
-The running daemon's loaded config, swap baseline, and cooldowns are not queried.
-Unavailable required system data or a truncated process list makes status fail
-explicitly with a nonzero exit code. Color is terminal-only; `NO_COLOR=1` disables it.
-Recent kill history remains in `~/.local/state/memguard.log`, not in status output.
+Memory
+  RAM used        12.61 / 16.00 GiB · 78.8%
+  Pressure        45% available
+  Swap used       1.96 GiB
+
+Config on disk
+  RAM thresholds  fast poll 85.0% · kill 95.0% · panic 98.0%
+  Poll interval   normal 1000 ms · fast 200 ms
+  Victim minimum  2.00 GiB
+  Swap allowance  0.00 GiB growth · burst floor 64 MiB
+  Cooldown        15.00 s
+  Protection      42 rules
+  File            ~/.config/memguard/memguard.conf
+
+Largest observed processes (eligibility uses config on disk)
+  Unprotected     Drive  PID 803 · 0.61 GiB · below minimum
+  Soft-protected  zotero  PID 797 · 0.67 GiB · below minimum
+```
